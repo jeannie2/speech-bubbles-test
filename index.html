@@ -61,7 +61,7 @@ if ('speechSynthesis' in window) { //initialise gameOver, speaking in global sco
   recognition.lang = 'en-US';
   //added:
   recognition.continuous = true; 
-  //recognition.interimResults = true; 
+  recognition.interimResults = true; 
 
   /*var qs;
   var gum;*/
@@ -96,7 +96,7 @@ if ('speechSynthesis' in window) { //initialise gameOver, speaking in global sco
       //document.querySelector("p#info").textContent = "listening";
     } 
 
-    recognition.start();
+    
 
     recognition.onspeechend = function() {
       recognition.stop();
@@ -105,6 +105,8 @@ if ('speechSynthesis' in window) { //initialise gameOver, speaking in global sco
       //document.querySelector("p#info").textContent = "stopped listening";
     }
   }
+
+  recognition.start();
 
   const el = document.getElementById("icecream"); //works?
 
