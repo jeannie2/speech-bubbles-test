@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+    <title>Using jParallax to create own interactive e-card | Script Tutorials</title>
+    <meta name="author" content="Script Tutorials" />
+
+</head> 
+
+<style>
+html,
+body,
+.container {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    font-size: 5em;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+}
+
+.box:hover {
+    color: #0bc;
+    font-size: 7em;
+}
+  
+</style>
+
+<body> 
+    <div class="container">
+        <div id="icecream" class="box">Random Google Font</div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+
+<script>
+
+if ('speechSynthesis' in window) { //initialise gameOver, speaking in global scope (or else no defined until run functions) and in case proceed at start
+  console.log('Speech recognition is supported');
+  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+  var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+  var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+  var synth = window.speechSynthesis;
+  var speaking = synth.speaking;
+  var speaking = false;
+
+  var recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  //added:
+  recognition.continuous = true; 
+  recognition.interimResults = true; 
+
+  /*var qs;
+  var gum;*/
+  //var results = document.getElementById("results"); //easier
+  //var sound = document.getElementById("sound"); 
+  //var listening = false;
+
+
+  window.onunload = function () { 
+    window.speechSynthesis.cancel(); 
+  }
+
+  document.addEventListener('visibilitychange', function(){
+    window.speechSynthesis.cancel();
+    console.log("changed tab"); //stops speaking if change tab
+  })
+
+  document.body.onkeyup = function(e) { //order matters. if gameover last condition: when gameover and continue press spacebar, prints "message showing" rather than "game Over" when continue press spacebar
+  //some condiitons redundant
+    //if(media.src) {
+      if(e.keyCode == 32) { 
+        runSpeechRecognition();
+      }
+    }
+
+  /* window.onpopstate=function(){ alert("Back/Forward clicked!"); } */
+ 
+  function runSpeechRecognition() {
+    recognition.onstart=function() {
+      console.log("listening...");
+      //document.querySelector("p#info").style.display = block;
+      //document.querySelector("p#info").textContent = "listening";
+    } 
+
+    recognition.start();
+
+    recognition.onspeechend = function() {
+      recognition.stop();
+      console.log("stopped listening"); 
+      //document.querySelector("p#info").style.display = block;
+      //document.querySelector("p#info").textContent = "stopped listening";
+    }
+  }
+
+  recognition.onresult = function(event) {
+    var confidence = event.results[0][0].confidence;
+    var transcript = event.results[0][0].transcript;
+    console.log("transcript: " + transcript);
+    console.log("confidence: " + confidence * 100 + '%');
+    document.getElementById("icecream").textContent = transcript;
+    
+   // transcript = transcript.toUpperCase(); 
+
+    //checkAnswer(transcript, gum);
+  }
+
+  /*
+  function checkAnswer() {
+    document.getElementById("icecream").textContent = transcript;
+  }
+  */
+
+  recognition.onnomatch = function(event) {
+    console.log("Speech not recognised");
+    };
+  
+  recognition.onerror = function(event) {
+    console.log("Error: " + event.error);
+  }
+
+// Simple script to random choose google font
+// You want to use your own API_KEY you can get in https://developers.google.com/fonts/docs/developer_api
+const API_KEY = 'AIzaSyBWPXSByP6BJF745SOfEJEAeSAZWOaWHgQ';
+let fontsList = [];
+const el = document.getElementById("icecream"); //works?
+
+el.addEventListener('click', () => {
+    runSpeechRecognition();
+    const choosedFont = loadRandomFont(fontsList);
+    updateFont(el, choosedFont);
+});
+
+async function loadFontsList() {
+    try {
+        const result = await fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=' + API_KEY);
+        const data = await result.json();
+        console.log('loaded google fonts list: ', data.items.length);
+        return data.items;
+    } catch (error) {
+        console.log('loadFontsList', error, error.message);
+    }
+}
+
+function loadRandomFont(fontsList) {
+    const randomIndex = Math.floor(Math.random() * fontsList.length);
+    const choosedFont = fontsList[randomIndex].family;
+    WebFont.load({
+        google: {
+            families: [choosedFont]
+        }
+    });
+    console.log('choosed font: ', choosedFont);
+    return choosedFont;
+}
+
+
+function updateFont(el, choosedFont) {
+    el = document.getElementById("icecream"); 
+    el.style.fontFamily = choosedFont;
+    el.setAttribute('title', choosedFont);
+}
+
+
+async function main() {
+    fontsList = await loadFontsList();
+    const choosedFont = loadRandomFont(fontsList);
+    updateFont(el, choosedFont);
+}
+
+main();
+
+} 
+
+else { 
+    console.log("Speech recognition not supported");
+} 
+
+</script>
+
+
+</body> 
+</html>
