@@ -106,6 +106,8 @@ if ('speechSynthesis' in window) { //initialise gameOver, speaking in global sco
     }
   }
 
+  const el = document.getElementById("icecream"); //works?
+
   recognition.onresult = function(event) {
     var confidence = event.results[0][0].confidence;
     var transcript = event.results[0][0].transcript;
@@ -113,6 +115,8 @@ if ('speechSynthesis' in window) { //initialise gameOver, speaking in global sco
     console.log("confidence: " + confidence * 100 + '%');
     document.getElementById("icecream").textContent = transcript;
     
+    const choosedFont = loadRandomFont(fontsList);
+    updateFont(el, choosedFont);
    // transcript = transcript.toUpperCase(); 
 
     //checkAnswer(transcript, gum);
