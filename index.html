@@ -36,10 +36,45 @@ body {
     color: #0bc;
     font-size: 7em;
 }
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.box {
+  width: 300px;
+  margin: 50px auto;
+  background: #00bfb6;
+  padding: 20px;
+  text-align: center;
+  font-weight: 900;
+  color: #fff;
+  font-family: arial;
+  position: relative;
+}
+
+
+.sb4:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid transparent;
+  border-right: 10px solid #00bfb6;
+  border-top: 10px solid #00bfb6;
+  border-bottom: 10px solid transparent;
+  right: -50px;
+  bottom: -19px;
+}
+
   
 </style>
 
 <body> 
+
+        <div class="box sb4">I'm speech bubble</div>
+
     <div class="container">
         <div id="icecream" class="box">Random Google Font</div>
     </div>
@@ -60,8 +95,13 @@ if ('speechSynthesis' in window) { //initialise gameOver, speaking in global sco
   var recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
   //added:
+  /*
   recognition.continuous = true; 
   recognition.interimResults = true; 
+*/
+
+    //recognition.continuous = true; 
+    recognition.interimResults = true; 
 
   /*var qs;
   var gum;*/
