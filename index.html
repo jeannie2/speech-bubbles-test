@@ -38,7 +38,7 @@
             <div class="container">
                     <div id="icecream" class="box">Random Google Font</div>
                 </div>
-                
+
 		<h2>JavaScript Speech to Text</h2>
         <p>Click on the below button and speak something...</p>
         <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
@@ -61,8 +61,8 @@
                 var speaking = synth.speaking;
                 var speaking = false;*/
 
-                recognition.continuous = true; 
-                recognition.interimResults = true; 
+                recognition.continuous = false; 
+                //recognition.interimResults = true; 
                 recognition.lang = 'en-US';
             
 
