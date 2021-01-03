@@ -1,0 +1,109 @@
+<!doctype html>
+	<head>
+		<style>
+			/* CSS comes here */
+			body {
+			    font-family: arial;
+			}
+
+			button {
+			    padding:10px;
+			    background-color:#6a67ce;
+			    color: #FFFFFF;
+			    border: 0px;
+			    cursor:pointer;
+			    border-radius: 5px;
+			}
+
+			#output {
+			    background-color:#F9F9F9;
+			    padding:10px;
+			    width: 100%;
+			    margin-top:20px;
+			    line-height:30px;
+			}
+
+			.hide {
+			    display:none;
+			}
+
+			.show {
+			    display:block;
+			}
+            
+		</style>
+		<title>JavaScript Speech to Text</title>
+	</head>
+	<body>
+            <div class="container">
+                    <div id="icecream" class="box">Random Google Font</div>
+                </div>
+                
+		<h2>JavaScript Speech to Text</h2>
+        <p>Click on the below button and speak something...</p>
+        <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
+        <div id="output" class="hide"></div>
+		<script>
+			/* JS comes here */
+		    function runSpeechRecognition() {
+		        // get output div reference
+		        var output = document.getElementById("output");
+		        // get action element reference
+		        var action = document.getElementById("action");
+                // new speech recognition object
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+
+                /*not:
+                var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+                 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+                var synth = window.speechSynthesis;
+                var speaking = synth.speaking;
+                var speaking = false;*/
+
+                recognition.continuous = true; 
+                recognition.interimResults = true; 
+                recognition.lang = 'en-US';
+            
+
+
+  document.body.onkeyup = function(e) { //order matters. if gameover last condition: when gameover and continue press spacebar, prints "message showing" rather than "game Over" when continue press spacebar
+  //some condiitons redundant
+    //if(media.src) {
+      if(e.keyCode == 32) { 
+        runSpeechRecognition();
+      }
+    }
+
+                // This runs when the speech recognition service starts
+                recognition.onstart = function() {
+                    console.log("listening...");
+                    //action.innerHTML = "<small>listening, please speak...</small>";
+                };
+                
+                recognition.onspeechend = function() {
+                    console.log("stopped listening"); 
+                    //action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+                    recognition.stop();
+                }
+              
+                // This runs when the speech recognition service returns result
+                recognition.onresult = function(event) {
+                    var confidence = event.results[0][0].confidence;
+                    var transcript = event.results[0][0].transcript;
+                    /*output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence*100+"%";
+                    output.classList.remove("hide"); */
+
+                    console.log("transcript: " + transcript);
+                    console.log("confidence: " + confidence * 100 + '%');
+                    document.getElementById("icecream").textContent = transcript;
+                };
+              
+                 // start recognition
+                 recognition.start(); //inside runspeechrecognition function
+	        }
+		</script>
+	</body>
+</html>
+
+https://www.studytonight.com/post/javascript-speech-recognition-example-speech-to-text
